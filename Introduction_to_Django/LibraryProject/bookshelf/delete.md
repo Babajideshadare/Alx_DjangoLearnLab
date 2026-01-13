@@ -1,6 +1,6 @@
 from bookshelf.models import Book
-b = Book.objects.get(title="Nineteen Eighty-Four")
-b.delete()
+book = Book.objects.get(title="Nineteen Eighty-Four")
+book.delete()
 # Output: (1, {'bookshelf.Book': 1})
 list(Book.objects.all().values())
 # Output: []
