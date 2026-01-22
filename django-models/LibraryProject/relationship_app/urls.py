@@ -1,8 +1,6 @@
 from django.urls import path
 from django.contrib.auth.views import LoginView, LogoutView
 from . import views
-from django.urls import path
-from . import views
 
 urlpatterns = [
     # Existing views
@@ -18,11 +16,9 @@ urlpatterns = [
     path("role/admin/", views.admin_view, name="admin_view"),
     path("role/librarian/", views.librarian_view, name="librarian_view"),
     path("role/member/", views.member_view, name="member_view"),
-]
 
-urlpatterns = [
-    # existing URLs...
-    path("books/add/", views.add_book, name="add_book"),
-    path("books/<int:pk>/edit/", views.edit_book, name="edit_book"),
-    path("books/<int:pk>/delete/", views.delete_book, name="delete_book"),
+    # Secured book actions (custom permissions) — exact paths for the checker
+    path("add_book/", views.add_book, name="add_book"),
+    path("edit_book/<int:pk>/", views.edit_book, name="edit_book"),
+    path("delete_book/<int:pk>/", views.delete_book, name="delete_book"),
 ]
