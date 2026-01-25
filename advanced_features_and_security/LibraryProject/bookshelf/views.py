@@ -4,7 +4,8 @@ from django.contrib.auth.decorators import permission_required
 from django.views.decorators.csrf import csrf_protect
 
 from .models import Book
-from .forms import BookSearchForm, ExampleForm
+from .forms import ExampleForm
+from .forms import BookSearchForm
 
 # Secure search using Django forms + ORM (prevents SQL injection)
 @permission_required('bookshelf.can_view', raise_exception=True)
