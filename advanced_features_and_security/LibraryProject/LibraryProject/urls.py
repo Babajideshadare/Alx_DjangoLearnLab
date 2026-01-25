@@ -5,8 +5,8 @@ from django.conf.urls.static import static
 
 urlpatterns = [
     path("admin/", admin.site.urls),
-    path("", include("relationship_app.urls")),  # keep your existing root app
-    path("books/", include("bookshelf.urls")),   # add this line
+    path("", include("relationship_app.urls")),  # root routes (your existing app)
+    path("books/", include("bookshelf.urls")),   # bookshelf routes
 ]
 
 if settings.DEBUG:

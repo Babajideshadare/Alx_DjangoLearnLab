@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Secure Form Example</title>
+</head>
+<body>
+  <h1>Secure Form (POST with CSRF)</h1>
+
+  <form method="post" novalidate>
+    {% csrf_token %}
+    {{ form.non_field_errors }}
+    <div>
+      {{ form.name.label_tag }} {{ form.name }}
+      {{ form.name.errors }}
+    </div>
+    <button type="submit">Submit</button>
+  </form>
+
+  {% if submitted_name %}
+    <p>Thanks, {{ submitted_name }}!</p>
+  {% endif %}
+
+  <p><a href="{% url 'bookshelf:book_list' %}">Back to books</a></p>
+</body>
+</html>
