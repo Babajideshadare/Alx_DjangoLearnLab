@@ -1,19 +1,13 @@
 <!DOCTYPE html>
 <html>
-<head>
-  <meta charset="utf-8">
-  <title>Books (secure search)</title>
-</head>
+<head><meta charset="utf-8"><title>Books (secure search)</title></head>
 <body>
   <h1>Books</h1>
-
-  <!-- Secure GET search form (includes CSRF per task) -->
   <form method="get">
     {% csrf_token %}
     {{ form.q.label_tag }} {{ form.q }}
     <button type="submit">Search</button>
   </form>
-
   <ul>
     {% for book in books %}
       <li>{{ book.title }} by {{ book.author }} ({{ book.publication_year }})</li>
@@ -21,9 +15,6 @@
       <li>No books found.</li>
     {% endfor %}
   </ul>
-
-  <p>
-    Try the POST example (CSRF-protected): <a href="{% url 'bookshelf:form_example' %}">Form example</a>
-  </p>
+  <p><a href="{% url 'bookshelf:form_example' %}">Secure POST form</a></p>
 </body>
 </html>

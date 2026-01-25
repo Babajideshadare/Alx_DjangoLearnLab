@@ -1,12 +1,22 @@
+from django.shortcuts import render
 from django.http import HttpResponse
 from django.contrib.auth.decorators import permission_required
+from django.views.decorators.csrf import csrf_protect
 
-# These require custom permissions defined on Book:
-# bookshelf.can_view, bookshelf.can_create, bookshelf.can_edit, bookshelf.can_delete
+from .models import Book
+from .forms import BookSearchForm, ExampleForm
 
+# Secure search using Django forms + ORM (prevents SQL injection)
 @permission_required('bookshelf.can_view', raise_exception=True)
 def book_list(request):
-    return HttpResponse("Book list - access granted (you have 'can_view').")
+    form = BookSearchForm(request.GET or None)
+    books = Book.objects.all()
+    if form.is_valid():
+        q = form.cleaned_data.get("q")
+        if q:
+            books = books.filter(title__icontains=q)
+    context = {"form": form, "books": books}
+    return render(request, "bookshelf/book_list.html", context)
 
 @permission_required('bookshelf.can_create', raise_exception=True)
 def book_create(request):
@@ -19,3 +29,15 @@ def book_edit(request, pk):
 @permission_required('bookshelf.can_delete', raise_exception=True)
 def book_delete(request, pk):
     return HttpResponse(f"Book delete {pk} - access granted (you have 'can_delete').")
+
+# CSRF-protected POST form using Django forms (safe input handling)
+@csrf_protect
+def form_example(request):
+    if request.method == "POST":
+        form = ExampleForm(request.POST)
+        if form.is_valid():
+            name = form.cleaned_data["name"]
+            return render(request, "bookshelf/form_example.html", {"form": ExampleForm(), "submitted_name": name})
+    else:
+        form = ExampleForm()
+    return render(request, "bookshelf/form_example.html", {"form": form})
