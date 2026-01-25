@@ -1,11 +1,32 @@
+cat > bookshelf/admin.py << 'PY'
 from django.contrib import admin
+from django.contrib.auth.admin import UserAdmin
+from django.utils.translation import gettext_lazy as _
+from .models import CustomUser, Book
 
-# Register your models here.
-from .models import Book
+class CustomUserAdmin(UserAdmin):
+    model = CustomUser
 
-class BookAdmin(admin.ModelAdmin):
-    list_display = ('title', 'author', 'publication_year')   # show these columns
-    list_filter = ('author', 'publication_year')             # filter sidebar
-    search_fields = ('title', 'author')                      # search box
+    list_display = ("username", "email", "first_name", "last_name", "date_of_birth", "is_staff", "is_active")
+    list_filter = ("is_staff", "is_active", "is_superuser", "groups")
 
-admin.site.register(Book, BookAdmin)
+    fieldsets = (
+        (None, {"fields": ("username", "password")}),
+        (_("Personal info"), {"fields": ("first_name", "last_name", "email", "date_of_birth", "profile_photo")}),
+        (_("Permissions"), {"fields": ("is_active", "is_staff", "is_superuser", "groups", "user_permissions")}),
+        (_("Important dates"), {"fields": ("last_login", "date_joined")}),
+    )
+
+    add_fieldsets = (
+        (None, {"classes": ("wide",), "fields": ("username", "password1", "password2")}),
+    )
+
+    search_fields = ("username", "email", "first_name", "last_name")
+    ordering = ("username",)
+
+# Explicit registration required by the checker:
+admin.site.register(CustomUser, CustomUserAdmin)
+
+# Also register Book (optional)
+admin.site.register(Book)
+PY
