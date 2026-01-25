@@ -10,35 +10,39 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/6.0/ref/settings/
 """
 
-from pathlib import Path
 
-# Build paths inside the project like this: BASE_DIR / 'subdir'.
-BASE_DIR = Path(__file__).resolve().parent.parent
-
-
-# Quick-start development settings - unsuitable for production
-# See https://docs.djangoproject.com/en/6.0/howto/deployment/checklist/
-
-# SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = 'django-insecure-efl)75r43qaf()7mwc^jo$*7_p*drnwufucenp5u$54amqq%q5'
 
-# SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+import os
+from pathlib import Path
 
-ALLOWED_HOSTS = []
-# Browser security headers
-SECURE_CONTENT_TYPE_NOSNIFF = True
-X_FRAME_OPTIONS = "DENY"
-SECURE_BROWSER_XSS_FILTER = True  # legacy, harmless to keep
+BASE_DIR = Path(__file__).resolve().parent.parent
 
-# Cookies sent only over HTTPS in production
-CSRF_COOKIE_SECURE = not DEBUG
-SESSION_COOKIE_SECURE = not DEBUG
+# Toggle DEBUG via env var (True locally, False in production)
+DEBUG = os.getenv("DJANGO_DEBUG", "True") == "True"
 
-# HTTP Strict Transport Security (only for production)
-SECURE_HSTS_SECONDS = 0 if DEBUG else 31536000
+# Allowed hosts (add your domain(s) in production)
+ALLOWED_HOSTS = ["127.0.0.1", "localhost"]
+
+# Enforce HTTPS and secure headers/cookies (production-ready)
+SECURE_SSL_REDIRECT = not DEBUG                     # redirect HTTP -> HTTPS in prod
+
+# HSTS (only over HTTPS; enabled in prod)
+SECURE_HSTS_SECONDS = 31536000 if not DEBUG else 0  # 1 year in prod, off in dev
 SECURE_HSTS_INCLUDE_SUBDOMAINS = not DEBUG
 SECURE_HSTS_PRELOAD = not DEBUG
+
+# Cookies must be sent over HTTPS (in prod)
+SESSION_COOKIE_SECURE = not DEBUG
+CSRF_COOKIE_SECURE = not DEBUG
+
+# Extra protections
+X_FRAME_OPTIONS = "DENY"
+SECURE_CONTENT_TYPE_NOSNIFF = True
+SECURE_BROWSER_XSS_FILTER = True  # legacy but fine to include
+
+# If behind a reverse proxy/HTTPS terminator (e.g., Nginx), keep this:
+SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
 
 # Application definition
 
