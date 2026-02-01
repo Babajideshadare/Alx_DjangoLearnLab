@@ -39,8 +39,20 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
 
     "rest_framework",  # DRF
+    "rest_framework.authtoken",
     "api",             # our API app
 ]
+
+REST_FRAMEWORK = {
+    "DEFAULT_AUTHENTICATION_CLASSES": [
+        "rest_framework.authentication.TokenAuthentication",
+        "rest_framework.authentication.SessionAuthentication",
+    ],
+    # Default permissions: read for everyone, write requires auth
+    "DEFAULT_PERMISSION_CLASSES": [
+        "rest_framework.permissions.IsAuthenticatedOrReadOnly",
+    ],
+}
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
