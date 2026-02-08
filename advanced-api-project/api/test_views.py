@@ -8,10 +8,10 @@ Covers:
 - Searching (?search= on title and author name)
 - Ordering (?ordering=title, ?ordering=-publication_year)
 
-How to run:
-    cd ~/Desktop/Alx_DjangoLearnLab/advanced-api-project
-    source .venv/Scripts/activate
-    python manage.py test api
+Note on test DB:
+- Django's test runner automatically uses an isolated test database.
+- This suite also demonstrates session-based auth via self.client.login()
+  to ensure permissions work independently of the dev DB.
 """
 
 from datetime import date
@@ -26,7 +26,8 @@ class BookAPITests(APITestCase):
     def setUp(self):
         # Users
         User = get_user_model()
-        self.user = User.objects.create_user(username="tester", password="pass12345")
+        self.password = "pass12345"
+        self.user = User.objects.create_user(username="tester", password=self.password)
 
         # Authors
         self.author1 = Author.objects.create(name="Chinua Achebe")
@@ -65,15 +66,18 @@ class BookAPITests(APITestCase):
         self.assertEqual(response.data["publication_year"], self.book1.publication_year)
         self.assertEqual(response.data["author"], self.book1.author.id)
 
-    # ---------- Permissions ----------
+    # ---------- Permissions (unauthenticated write should fail) ----------
     def test_create_requires_authentication(self):
         payload = {"title": "New Book", "publication_year": 2000, "author": self.author1.id}
         response = self.client.post(self.create_url, payload, format="json")
         self.assertIn(response.status_code, (status.HTTP_401_UNAUTHORIZED, status.HTTP_403_FORBIDDEN))
 
-    # ---------- Create / Update / Delete (authenticated) ----------
-    def test_create_book_authenticated_success(self):
-        self.client.force_authenticate(user=self.user)
+    # ---------- Authenticated write via session login ----------
+    def test_create_book_with_session_login_success(self):
+        # This uses Django session auth; demonstrates self.client.login against the isolated test DB.
+        logged_in = self.client.login(username="tester", password=self.password)
+        self.assertTrue(logged_in, "Login failed in test (check credentials)")
+
         payload = {"title": "  New Book  ", "publication_year": 1999, "author": self.author1.id}
         response = self.client.post(self.create_url, payload, format="json")
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
@@ -82,6 +86,7 @@ class BookAPITests(APITestCase):
         self.assertEqual(response.data["author"], self.author1.id)
         self.assertTrue(Book.objects.filter(title="New Book", author=self.author1).exists())
 
+    # ---------- Authenticated write via force_authenticate (also valid) ----------
     def test_create_book_future_year_invalid(self):
         self.client.force_authenticate(user=self.user)
         future_year = date.today().year + 1
