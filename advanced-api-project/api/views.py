@@ -1,51 +1,44 @@
-from rest_framework import generics, permissions, filters
+from rest_framework import generics, filters
+from rest_framework.permissions import IsAuthenticatedOrReadOnly, IsAuthenticated
 from .models import Book
 from .serializers import BookSerializer
 
-# ListView: GET /api/books/ (public)
-# - Adds simple search by title and author name using DRF's SearchFilter.
+# GET /api/books/ (public read)
 class BookListView(generics.ListAPIView):
     queryset = Book.objects.all().order_by("id")
     serializer_class = BookSerializer
-    permission_classes = [permissions.AllowAny]
+    permission_classes = [IsAuthenticatedOrReadOnly]
     filter_backends = [filters.SearchFilter]
     search_fields = ["title", "author__name"]
 
-
-# DetailView: GET /api/books/<pk>/ (public)
+# GET /api/books/<pk>/ (public read)
 class BookDetailView(generics.RetrieveAPIView):
     queryset = Book.objects.all()
     serializer_class = BookSerializer
-    permission_classes = [permissions.AllowAny]
+    permission_classes = [IsAuthenticatedOrReadOnly]
 
-
-# CreateView: POST /api/books/create/ (authenticated)
-# - Customizes behavior by trimming title and relying on serializer validation
-#   (publication_year must not be in the future).
+# POST /api/books/create/ (auth required)
 class BookCreateView(generics.CreateAPIView):
     queryset = Book.objects.all()
     serializer_class = BookSerializer
-    permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [IsAuthenticated]
 
     def perform_create(self, serializer):
         title = serializer.validated_data.get("title", "").strip()
         serializer.save(title=title)
 
-
-# UpdateView: PUT/PATCH /api/books/<pk>/update/ (authenticated)
-# - Customizes behavior by trimming title and letting serializer validate input.
+# PUT/PATCH /api/books/update/<pk>/ (auth required)
 class BookUpdateView(generics.UpdateAPIView):
     queryset = Book.objects.all()
     serializer_class = BookSerializer
-    permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [IsAuthenticated]
 
     def perform_update(self, serializer):
         title = serializer.validated_data.get("title", "").strip()
         serializer.save(title=title)
 
-
-# DeleteView: DELETE /api/books/<pk>/delete/ (authenticated)
+# DELETE /api/books/delete/<pk>/ (auth required)
 class BookDeleteView(generics.DestroyAPIView):
     queryset = Book.objects.all()
     serializer_class = BookSerializer
-    permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [IsAuthenticated]
