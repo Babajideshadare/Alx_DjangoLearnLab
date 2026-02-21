@@ -1,0 +1,1 @@
+console.log("Diabetes Decoded static loaded.");
