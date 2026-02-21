@@ -1,0 +1,13 @@
+{% extends "blog/base.html" %}
+{% block title %}Your Profile • Diabetes Decoded{% endblock %}
+{% block content %}
+  <h2>Your Profile</h2>
+  <form method="post" novalidate>
+    {% csrf_token %}
+    {{ form.non_field_errors }}
+    <div>{{ form.first_name.label_tag }} {{ form.first_name }} {{ form.first_name.errors }}</div>
+    <div>{{ form.last_name.label_tag }} {{ form.last_name }} {{ form.last_name.errors }}</div>
+    <div>{{ form.email.label_tag }} {{ form.email }} {{ form.email.errors }}</div>
+    <button type="submit">Save changes</button>
+  </form>
+{% endblock %}

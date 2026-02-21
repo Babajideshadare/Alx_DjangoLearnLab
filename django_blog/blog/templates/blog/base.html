@@ -6,11 +6,24 @@
   <title>{% block title %}Diabetes Decoded{% endblock %}</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <link rel="stylesheet" href="{% static 'blog/css/style.css' %}">
+  {% block extra_head %}{% endblock %}
 </head>
 <body>
   <header class="site-header">
     <h1>Diabetes Decoded</h1>
     <p class="tagline">You can win Type 2 Diabetes.</p>
+    <nav style="margin: 0 0 1rem;">
+      {% if user.is_authenticated %}
+        <a href="{% url 'profile' %}">Profile</a>
+        <form method="post" action="{% url 'logout' %}" style="display:inline;">
+          {% csrf_token %}
+          <button type="submit">Logout</button>
+        </form>
+      {% else %}
+        <a href="{% url 'login' %}">Login</a>
+        <a href="{% url 'register' %}">Register</a>
+      {% endif %}
+    </nav>
     <hr>
   </header>
 
@@ -19,5 +32,6 @@
   </main>
 
   <script src="{% static 'blog/js/app.js' %}"></script>
+  {% block extra_scripts %}{% endblock %}
 </body>
 </html>
