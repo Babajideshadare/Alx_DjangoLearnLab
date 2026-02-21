@@ -1,0 +1,4 @@
+django_blog/.venv/
+__pycache__/
+*.pyc
+db.sqlite3
