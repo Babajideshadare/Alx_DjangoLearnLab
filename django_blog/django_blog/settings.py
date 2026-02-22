@@ -67,8 +67,6 @@ TEMPLATES = [
     },
 ]
 
-STATIC_URL = "static/"
-
 WSGI_APPLICATION = 'django_blog.wsgi.application'
 
 
