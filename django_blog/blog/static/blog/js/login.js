@@ -1,1 +1,1 @@
-console.log("Login page JS loaded.");
+console.log('Login page JS loaded.');

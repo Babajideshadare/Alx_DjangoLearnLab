@@ -1,1 +1,1 @@
-console.log("Register page JS loaded.");
+console.log('Register page JS loaded.');
