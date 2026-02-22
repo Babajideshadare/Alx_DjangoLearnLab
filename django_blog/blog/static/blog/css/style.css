@@ -1,6 +1,0 @@
-:root { --primary: #1ABC9C; }
-body { font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif; margin: 2rem; color: #222; }
-.site-header h1 { margin: 0 0 .25rem; color: var(--primary); }
-.site-header .tagline { margin: 0 0 1rem; color: #555; }
-.container { max-width: 900px; }
-hr { border: none; border-top: 3px solid var(--primary); margin: 1rem 0 2rem; }

@@ -1,7 +1,0 @@
-/* Register page styles */
-.auth-page { max-width: 520px; margin: 2rem auto; padding: 1.25rem; border: 1px solid #e7e7e7; border-radius: 8px; background: #fff; }
-.auth-page h2 { margin-top: 0; color: #1ABC9C; }
-.auth-page form div { margin-bottom: .75rem; }
-.auth-page input { width: 100%; padding: .6rem .7rem; border: 1px solid #ccc; border-radius: 6px; }
-.auth-page button { background: #1ABC9C; color: #fff; border: none; padding: .6rem 1rem; border-radius: 6px; cursor: pointer; }
-.auth-page button:hover { background: #16a085; }
