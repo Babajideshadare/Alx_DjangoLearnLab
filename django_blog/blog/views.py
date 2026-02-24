@@ -6,7 +6,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 
 
 from .models import Post, Comment
-from .forms import ProfileForm
+from .forms import ProfileForm, CommentForm
 
 def register(request):
     return render(request, 'blog/register.html')
@@ -74,7 +74,7 @@ class CommentListView(ListView):
 
 class CommentCreateView(LoginRequiredMixin, CreateView):
     model = Comment
-    fields = ['content']
+    form_class = CommentForm
     template_name = 'blog/comment_form.html'
 
     def form_valid(self, form):
@@ -90,7 +90,7 @@ class CommentCreateView(LoginRequiredMixin, CreateView):
 
 class CommentUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     model = Comment
-    fields = ['content']
+    form_class = CommentForm
     template_name = 'blog/comment_form.html'
 
     def test_func(self):
