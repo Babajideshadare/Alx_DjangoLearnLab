@@ -1,0 +1,19 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Movie Review Form</title>
+    <link rel="stylesheet" href="{% static 'blog/css/login.css' %}">
+</head>
+<body>
+<div class="auth-container">
+    <h1 class="auth-title">Movie Review</h1>
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Save</button>
+    </form>
+</div>
+</body>
+</html>

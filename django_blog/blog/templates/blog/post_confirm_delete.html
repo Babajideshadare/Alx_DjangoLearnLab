@@ -1,0 +1,20 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Delete Movie Review</title>
+    <link rel="stylesheet" href="{% static 'blog/css/login.css' %}">
+</head>
+<body>
+<div class="auth-container">
+    <h1 class="auth-title">Delete Review</h1>
+    <p>Are you sure you want to delete the review "{{ object.title }}"?</p>
+
+    <form method="post">
+        {% csrf_token %}
+        <button type="submit">Yes, delete</button>
+    </form>
+</div>
+</body>
+</html>

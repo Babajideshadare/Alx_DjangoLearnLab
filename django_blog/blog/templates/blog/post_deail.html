@@ -1,0 +1,15 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ object.title }} - Movie Review</title>
+    <link rel="stylesheet" href="{% static 'blog/css/login.css' %}">
+</head>
+<body>
+<div class="auth-container">
+    <h1 class="auth-title">{{ object.title }}</h1>
+    <p>{{ object.content }}</p>
+</div>
+</body>
+</html>

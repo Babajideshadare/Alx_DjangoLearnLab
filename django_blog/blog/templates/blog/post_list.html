@@ -1,0 +1,24 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Latest Movie Reviews</title>
+    <link rel="stylesheet" href="{% static 'blog/css/login.css' %}">
+</head>
+<body>
+<div class="auth-container">
+    <h1 class="auth-title">Latest Movie Reviews</h1>
+
+    {% for post in posts %}
+        <article>
+            <h2><a href="{% url 'post-detail' post.pk %}">{{ post.title }}</a></h2>
+            <p>{{ post.content|truncatechars:150 }}</p>
+        </article>
+        <hr>
+    {% empty %}
+        <p>No reviews have been posted yet.</p>
+    {% endfor %}
+</div>
+</body>
+</html>
