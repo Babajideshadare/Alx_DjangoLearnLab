@@ -10,6 +10,14 @@
 <div class="auth-container">
     <h1 class="auth-title">Latest Movie Reviews</h1>
 
+     <form method="get" action="/search/">
+        <input type="text"
+               name="q"
+               placeholder="Search reviews..."
+               value="{{ query|default:'' }}">
+        <button type="submit">Search</button>
+    </form>
+
     {% for post in posts %}
         <article>
             <h2><a href="{% url 'post-detail' post.pk %}">{{ post.title }}</a></h2>
