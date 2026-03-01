@@ -1,4 +1,4 @@
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth.decorators import login_required
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 from django.urls import reverse_lazy
@@ -7,10 +7,17 @@ from django.db.models import Q
 
 
 from .models import Post, Comment
-from .forms import ProfileForm, CommentForm, PostForm
+from .forms import ProfileForm, CommentForm, PostForm, UserRegisterForm
 
 def register(request):
-    return render(request, 'blog/register.html')
+    if request.method == 'POST':
+        form = UserRegisterForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('login')
+    else:
+        form = UserRegisterForm()
+    return render(request, 'blog/register.html', {'form': form})
 
 
 @login_required

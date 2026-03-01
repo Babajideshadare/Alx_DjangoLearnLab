@@ -1,32 +1,46 @@
-{% load static %}
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Latest Movie Reviews</title>
-    <link rel="stylesheet" href="{% static 'blog/css/login.css' %}">
-</head>
-<body>
-<div class="auth-container">
-    <h1 class="auth-title">Latest Movie Reviews</h1>
+{% extends 'blog/base.html' %}
 
-     <form method="get" action="/search/">
-        <input type="text"
-               name="q"
-               placeholder="Search reviews..."
-               value="{{ query|default:'' }}">
+{% block title %}Latest Movie Reviews{% endblock %}
+
+{% block content %}
+    <h1 class="page-title">Latest Movie Reviews</h1>
+
+    <form class="search-bar" method="get" action="{% url 'search' %}">
+        <input type="text" name="q" placeholder="Search reviews..." value="{{ query|default:'' }}">
         <button type="submit">Search</button>
     </form>
 
     {% for post in posts %}
-        <article>
-            <h2><a href="{% url 'post-detail' post.pk %}">{{ post.title }}</a></h2>
-            <p>{{ post.content|truncatechars:150 }}</p>
+        <article class="post-card">
+            <h2>
+                <a href="{% url 'post-detail' post.pk %}">{{ post.title }}</a>
+            </h2>
+            <p class="post-meta">
+                Published {{ post.published_date|date:"M j, Y" }}
+                by {{ post.author.username }}
+            </p>
+
+        {% if post.image %}
+        <img src="{{ post.image.url }}" alt="{{ post.title }}" class="post-image">
+        {% endif %}
+        
+            <p class="post-excerpt">
+                {{ post.content|truncatechars:200 }}
+            </p>
+
+            {% with post.tags.all as tags %}
+                {% if tags %}
+                    <div class="tag-list">
+                        {% for tag in tags %}
+                            <a href="{% url 'posts-by-tag' tag.name %}" class="tag-chip">
+                                {{ tag.name }}
+                            </a>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            {% endwith %}
         </article>
-        <hr>
     {% empty %}
         <p>No reviews have been posted yet.</p>
     {% endfor %}
-</div>
-</body>
-</html>
+{% endblock %}

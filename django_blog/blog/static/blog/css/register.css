@@ -12,7 +12,42 @@ body {
     border-radius: 8px;
 }
 
+.auth-container form p {
+    margin-bottom: 16px;
+}
+
+.auth-container input[type="text"],
+.auth-container input[type="email"],
+.auth-container input[type="password"] {
+    width: 100%;
+    padding: 8px;
+    box-sizing: border-box;
+}
+
 .auth-title {
     text-align: center;
     margin-bottom: 20px;
+}
+
+.helptext,
+.helptext ul,
+.helptext li {
+    font-size: 0.85rem;       /* smaller text */
+    color: #9ca3af;           /* soft grey */
+    font-style: italic;       /* italic */
+    font-weight: normal;      /* not bold */
+    margin-top: 4px;
+}
+
+.required-star {
+    color: #f87171;          /* soft red */
+    margin-left: 4px;
+    font-weight: bold;
+}
+
+.error-text {
+    display: block;
+    font-size: 0.8rem;
+    color: #fca5a5;          /* light red for errors */
+    margin-top: 4px;
 }

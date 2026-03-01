@@ -1,5 +1,6 @@
 from django import forms
 from django.contrib.auth.models import User
+from django.contrib.auth.forms import UserCreationForm
 from taggit.forms import TagWidget
 from .models import Comment, Post, Tag
 
@@ -21,14 +22,29 @@ class CommentForm(forms.ModelForm):
             raise forms.ValidationError("Comment content cannot be empty.")
         return content
 
+class UserRegisterForm(UserCreationForm):
+    name = forms.CharField(max_length=150, required=True, label='Name')
+    email = forms.EmailField(required=True, label='Email')
+
+    class Meta:
+        model = User
+        fields = ('name', 'email', 'username', 'password1', 'password2')
+
+    def save(self, commit=True):
+        user = super().save(commit=False)
+        # Store the entered name and email on the user object
+        user.first_name = self.cleaned_data['name']
+        user.email = self.cleaned_data['email']
+        if commit:
+            user.save()
+        return user
 
 class PostForm(forms.ModelForm):
-    # Comma-separated tags input, e.g. "health, stress, sleep"
     tags = forms.CharField(required=False, help_text="Comma-separated tags")
 
     class Meta:
         model = Post
-        fields = ['title', 'content', 'tags']
+        fields = ['title', 'content', 'tags', 'image']
         widgets = {
             'tags': TagWidget(),
         }

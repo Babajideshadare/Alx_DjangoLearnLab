@@ -1,19 +1,38 @@
-{% load static %}
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Movie Review Form</title>
-    <link rel="stylesheet" href="{% static 'blog/css/login.css' %}">
-</head>
-<body>
-<div class="auth-container">
-    <h1 class="auth-title">Movie Review</h1>
-    <form method="post">
+{% extends 'blog/base.html' %}
+
+{% block title %}Add Movie Review{% endblock %}
+
+{% block content %}
+<div class="form-card">
+    <h1 class="page-title">Movie Review</h1>
+
+    <form method="post" enctype="multipart/form-data">
         {% csrf_token %}
-        {{ form.as_p }}
-        <button type="submit">Save</button>
+
+        <div class="form-field">
+            <label for="{{ form.title.id_for_label }}">Title</label>
+            {{ form.title }}
+        </div>
+
+        <div class="form-field">
+            <label for="{{ form.content.id_for_label }}">Content</label>
+            {{ form.content }}
+        </div>
+
+        <div class="form-field">
+            <label for="{{ form.tags.id_for_label }}">Tags</label>
+            {{ form.tags }}
+            {% if form.tags.help_text %}
+                <small class="helptext">{{ form.tags.help_text }}</small>
+            {% endif %}
+        </div>
+
+         <div class="form-field">
+            <label for="{{ form.image.id_for_label }}">Image (optional)</label>
+            {{ form.image }}
+        </div>
+
+        <button type="submit" class="primary-button">Save review</button>
     </form>
 </div>
-</body>
-</html>
+{% endblock %}

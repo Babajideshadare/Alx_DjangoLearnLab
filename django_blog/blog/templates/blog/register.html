@@ -9,9 +9,30 @@
 <body>
 <div class="auth-container">
     <h1 class="auth-title">Create Your Reviewer Account</h1>
+
     <form method="post">
         {% csrf_token %}
-        {{ form.as_p }}
+
+        {% for field in form %}
+            <p>
+                <label for="{{ field.id_for_label }}">
+                    {{ field.label }}
+                    {% if field.field.required %}
+                        <span class="required-star">*</span>
+                    {% endif %}
+                </label>
+                {{ field }}
+
+                {% if field.help_text %}
+                    <small class="helptext">{{ field.help_text|safe }}</small>
+                {% endif %}
+
+                {% for error in field.errors %}
+                    <small class="error-text">{{ error }}</small>
+                {% endfor %}
+            </p>
+        {% endfor %}
+
         <button type="submit">Register</button>
     </form>
 </div>
