@@ -6,7 +6,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 
 
 from .models import Post, Comment
-from .forms import ProfileForm, CommentForm
+from .forms import ProfileForm, CommentForm, PostForm
 
 def register(request):
     return render(request, 'blog/register.html')
@@ -37,14 +37,19 @@ class PostDetailView(DetailView):
 
 class PostCreateView(LoginRequiredMixin, CreateView):
     model = Post
-    fields = ['title', 'content']
+    form_class = PostForm
     template_name = 'blog/post_form.html'
     success_url = reverse_lazy('post-list')
+
+    def form_valid(self, form):
+        # Ensure the author is set to the logged-in user
+        form.instance.author = self.request.user
+        return super().form_valid(form)
 
 
 class PostUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     model = Post
-    fields = ['title', 'content']
+    form_class = PostForm
     template_name = 'blog/post_form.html'
     success_url = reverse_lazy('post-list')
 
